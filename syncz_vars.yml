@@ -1,6 +1,4 @@
-host: <host>
-port: 2022
-user: <mfuser>
+host: ca32.lvn.broadcom.net
+port: 22
+user: PLAPE03
 remotedir: doggos
-
-

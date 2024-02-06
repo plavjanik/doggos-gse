@@ -1,0 +1,16 @@
+{
+  "sdkHome": "/Users/plape03/.nvm/versions/node/v18.18.2/lib/node_modules/@broadcom/test4z-framework",
+  "hostname": "ca32.lvn.broadcom.net",
+  "sshPort": "22",
+  "user": "PLAPE03",
+  "sshKeyFile": "/Users/plape03/.ssh/id_test4z",
+  "zosWorkspacePath": "/a/plape03/doggos",
+  "createZfs": false,
+  "testHlq": "PLAPE03.DOGGOS",
+  "testMgmtclas": "TSO",
+  "testStorclas": "",
+  "testVolser": "",
+  "testUnit": "",
+  "testDataclas": "",
+  "javaHome": "/usr/lpp/java/J11.0_64"
+}

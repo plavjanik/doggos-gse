@@ -1,0 +1,6 @@
+{
+  "appLoadLibraries": ["PLAPE03.PUBLIC.LOADLIB"],
+  "bindSyslibs": ["CEE.SCEELKED"],
+  "copyPaths": ["DOGGOS/COPY/*.CPY"],
+  "cobolTestGlobs": ["DOGGOS/COBTEST/*.cbl"]
+}

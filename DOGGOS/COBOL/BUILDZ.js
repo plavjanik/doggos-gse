@@ -9,60 +9,58 @@ var os = require("bldz/os");
 // build-in bldz modules requires
 var loadlibDSN = `${os.user()}.PUBLIC.LOADLIB`;
 
-
-
 var dataset_rules = files.ds.alloc([
-    {
-        attributes: {
-            dsn: loadlibDSN,
-            lrecl: 0,
-            recfm: "U",
-            dsorg: "PO",
-            dsntype: "LIBRARY",
-            blksize: 6160,
-            vol: "TSU006",
-        },
-        opts: {
-            delete: true
-        }
-    }
+  {
+    attributes: {
+      dsn: loadlibDSN,
+      lrecl: 0,
+      recfm: "U",
+      dsorg: "PO",
+      dsntype: "LIBRARY",
+      blksize: 6160,
+      vol: "TSU006",
+    },
+    opts: {
+      delete: true,
+    },
+  },
 ]);
 
 // general COBOL compile rules - create a compile rule per *.cbl file found
 var generated = compile.cobol({
-    srcs: "*.CBL",
-    copyPaths: [`//'${os.user()}.DOGGOS.COPYBOOK'`],
-    opts : [
-        "APOST",
-        "LIST",
-        "RENT",
-        "MAP",
-        "NONUMBER",
-        "XREF",
-        "NOSTGOPT",
-        "OPT(0)",
-        "LINECOUNT(60)"
-    ]
-        
-    
+  srcs: "*.CBL",
+  copyPaths: [`//'${os.user()}.DOGGOS.COPYBOOK'`],
+  opts: [
+    "APOST",
+    "LIST",
+    "RENT",
+    "MAP",
+    "NONUMBER",
+    "XREF",
+    "TEST", // Required by Test4z
+    "NOSTGOPT",
+    "OPT(0)",
+    "LINECOUNT(60)",
+  ],
 });
 
 // Bind the objects into an executable
 
 var binderGenerated = binder.bind({
-    outs: "doggos",
-    syslibs: ["//CEE.SCEELKED"],
-    deps: generated.rules
+  outs: "doggos",
+  syslibs: ["//CEE.SCEELKED"],
+  deps: generated.rules,
+  opts: ["XREF", "LIST", "LET", "MAP", "REUS(RENT)", "AMODE=31", "RMODE=ANY"], // REUS(RENT) required by Test4z
 });
 
 // preprare PROTSYM
 var symbol = genrule_script({
-    name: "in25cob2",
-    script_file: "../scripts/in25cob2.js",
-    deps: generated.rules
-    // deps: [
-    //     "cobcompile"
-    // ]
+  name: "in25cob2",
+  script_file: "../scripts/in25cob2.js",
+  deps: generated.rules,
+  // deps: [
+  //     "cobcompile"
+  // ]
 });
 
 // group.outputs({
@@ -72,16 +70,16 @@ var symbol = genrule_script({
 // });
 
 files.ds.copy({
-    name: "copyLoad",
-    dsn: loadlibDSN,
-    deps: dataset_rules.rules.concat(binderGenerated.rules),
-    // [
-    //     dataset_rules.rules,
-    //     binderGenerated.rules
-    // ],
-    // binary: false,
-    executable: true,
-    
-    // files: "../build-out/COBOL/doggos",
-    // files: binderGenerated.rules.
+  name: "copyLoad",
+  dsn: loadlibDSN,
+  deps: dataset_rules.rules.concat(binderGenerated.rules),
+  // [
+  //     dataset_rules.rules,
+  //     binderGenerated.rules
+  // ],
+  // binary: false,
+  executable: true,
+
+  // files: "../build-out/COBOL/doggos",
+  // files: binderGenerated.rules.
 });
